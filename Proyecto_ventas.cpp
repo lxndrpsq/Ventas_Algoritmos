@@ -3,6 +3,12 @@
 #include <string>
 using namespace std;
 
+struct Cliente { //estructura que será usada para ingresar a los clientes nuevos 
+    string nombre; //y asi poder usar varios datos
+    string telefono;
+    string correo;
+};
+
 // ===== FUNCIONES =====
 void menu();
 void registrarUsuario();
@@ -10,7 +16,84 @@ bool inicio();
 
 void registrarVenta();      // 1
 void gestionarInventario(); // 2
-void gestionarClientes();   // 4
+void gestionarClientes() {  // 4
+	int opcion;
+    Cliente cliente; //se usa la estructura creada
+    fstream archivo; // para leer y escribir el archivo de clientes
+
+    do { //bucle while para las opciones de clientes
+        cout << "\n--- MENU CLIENTES FRECUENTES ---\n";
+        cout << "1. Registrar nuevo cliente\n";
+        cout << "2. Mostrar lista de clientes\n";
+        cout << "3. Regresar al menu\n"; //se muestran las opciones disponibles
+        cout << "Elija una opcion: ";
+        cin >> opcion;
+        cin.ignore(); // limpia el buffer de entrada
+
+        switch (opcion) { //se elige la opción en base a la opcion elegida
+        case 1: {
+            // Abrir archivo en modo agregar
+            archivo.open("clientes.txt", ios::app); //se usa ios::app para poder agregar la informacion al final
+            if (!archivo) { //se verifica que el archivo se pueda abrir
+                cout << "Error al abrir el archivo.\n";
+                break;
+            }
+			//se piden los datos y se guardan en la estructura
+            cout << "\n--- Registro de nuevo cliente ---\n";
+            cout << "Ingrese el nombre: ";
+            getline(cin, cliente.nombre);
+            cout << "Ingrese el telefono: ";
+            getline(cin, cliente.telefono);
+            cout << "Ingrese el correo electronico: ";
+            getline(cin, cliente.correo);
+
+            // Guardar en el archivo los datos obtenidos
+            archivo << cliente.nombre << "|" << cliente.telefono << "|" << cliente.correo << endl;
+            archivo.close();
+
+            cout << "Cliente registrado correctamente.\n";
+            break;
+        }
+
+        case 2: {
+            archivo.open("clientes.txt", ios::in); //se abre el archivo en modo lectura
+            if (!archivo) { //verificar que el archivo sea válido
+                cout << "No hay clientes registrados o no se pudo abrir el archivo.\n";
+                break;
+            }
+
+            cout << "\n--- Lista de clientes ---\n";
+            string linea;
+            while (getline(archivo, linea)) {
+                // Cada línea tiene formato: nombre|telefono|correo
+                size_t p1 = linea.find("|"); //se usa size_t para poder encontrar la posición del separador
+                size_t p2 = linea.find("|", p1 + 1);
+
+                string nombre = linea.substr(0, p1); //se usa substr para poder sacar solo la información de cada dato
+                string telefono = linea.substr(p1 + 1, p2 - p1 - 1);
+                string correo = linea.substr(p2 + 1);
+
+                cout << "Nombre: " << nombre << endl; //se imprime los datos extraídos anteriormente
+                cout << "Telefono: " << telefono << endl;
+                cout << "Correo: " << correo << endl;
+                cout << "--------------------------\n"; //se hace un separador para cada cliente
+            }
+
+            archivo.close(); //se cierra el archivo
+            break;
+        }
+
+        case 3:
+            cout << "Saliendo de la gestion de clientes...\n"; //mensaje de salida
+            break;
+
+        default:
+            cout << "Opcion no valida.\n"; //si el usuario ingresa una opcón inválida
+            break;
+        }
+    } while (opcion != 3); //se sale del bucle si se selecciona opción 3
+
+};  
 void facturar();            // 5
 void generarReportes();     // 6
 void enviarPromociones();   // 7
