@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <cctype>
 using namespace std;
 
 struct Cliente { //estructura que será usada para ingresar a los clientes nuevos 
@@ -16,6 +18,95 @@ bool inicio();
 
 void registrarVenta();      // 1
 void gestionarInventario(); // 2
+
+vector<string> nombreproducto;
+vector<float> precioproducto;
+vector<int> existenciaproducto;
+int opcion;
+
+do{
+	cout<<"\n--- GESTION DE INVENTARIOS ---\n";
+	cout<<"1. Agregar productos\n";
+	cout<<"2. Actualizar productos\n";
+	cout<<"3. Consultar inventario\n";
+	cout<<"4. Regresar al menu\n";
+	cout<<"Elija una opcion:";
+	cin>>opcion;
+	cin.ignore();
+
+	switch (opcion)
+		case 1:{
+			cout<<"\n--- AGREGAR PRODUCTO ---\n";
+			do{
+			cout<<"1. Nuevo producto.\n";
+			cout<<"2. Regresar al menu anterior.\n";
+			switch (opcion){
+				case 1:{
+					string nombre
+					float precio
+					int existencia
+				
+					cout<<"Ingrese el nombre del producto\n";
+					getline(cin, nombre);
+					for (char &c:nombre){
+						c=tolower(c);
+					}
+					
+					cout<<"Ingrese el precio del producto\n";
+					cin>>precio;
+					
+					cout<<"Ingrese la cantidad en existencia\n";
+					cin>>existencia;
+					cin.ignore();
+
+					nombreproducto.push_back(nombre);
+					precioproducto.push_back(precio);
+					existenciaproducto.push_back(existencia);
+
+					cout<<"\n--- PRODUCTO AGREGADO ---\n";
+					break;
+				}
+				case 2:
+					cout<<"\nRegresando...\n";
+					break;
+				default:
+					cout<<"Opcion invalida.\n";
+					break;
+			}
+		} while (opcion!=2);
+		break;
+	}
+		case 2:{
+			if (nombreproducto.empty()){
+				cout<<"No hay productos registrados.\n";
+				break;
+			}
+			do {
+				cout<<"1. Actualizar producto.\n";
+				cout<<"2. Regresar al menu anterior.\n";
+				switch (opcion){
+					case 1:{
+						string buscarprod
+						cout<<"\n--- ACTUALIZAR PRODUCTOS ---\n";
+						cout<<"Ingrese el nombre del producto a buscar.\n";
+						cin>>buscarprod;
+						for (char &c:nombre){
+							c=tolower(c);
+							}
+						bool encontrar=false;
+						for (size_t i=0; i<nombreproducto.size();i++){
+							if (nombreproducto[i]==buscarprod){
+								encontrar=true;
+							}
+						}
+							
+						}
+					}
+				}
+				
+			}
+			}
+
 void gestionarClientes() {  // 4
 	int opcion;
     Cliente cliente; //se usa la estructura creada
