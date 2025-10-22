@@ -17,95 +17,186 @@ void registrarUsuario();
 bool inicio();
 
 void registrarVenta();      // 1
+
+
+
 void gestionarInventario(); // 2
+void agregarProducto(vector<string>&, vector<float>&, vector<int>&);
+void actualizarProducto(vector<string>&, vector<float>&, vector<int>&);
+void consultarInventario(const vector<string>&, const vector<float>&, const vector<int>&);
 
-vector<string> nombreproducto;
-vector<float> precioproducto;
-vector<int> existenciaproducto;
+vector<string> nombreproducto; //Vector para guardar productos
+vector<float> precioproducto; //Vector para guardar los precios
+vector<int> existenciaproducto; //Vector para guardar las existencias
+
+void gestionarInventario();
 int opcion;
+do {
+        cout << "\n--- GESTION DE INVENTARIOS ---\n";
+        cout << "1. Agregar productos\n";
+        cout << "2. Actualizar productos\n";
+        cout << "3. Consultar inventario\n";
+        cout << "4. Regresar al menu\n";
+        cin >> opcion;
+        cin.ignore(); //Limpiar buffer de entrada
 
-do{
-	cout<<"\n--- GESTION DE INVENTARIOS ---\n";
-	cout<<"1. Agregar productos\n";
-	cout<<"2. Actualizar productos\n";
-	cout<<"3. Consultar inventario\n";
-	cout<<"4. Regresar al menu\n";
-	cout<<"Elija una opcion:";
-	cin>>opcion;
-	cin.ignore();
+        switch (opcion) {
+            case 1: { //AGREGAR PRODUCTOS
+                int subopcion; //Variable temporal para registrar las opciones en agregar productos
+                do {
+                    cout << "\n--- AGREGAR PRODUCTO ---\n";
+                    cout << "1. Nuevo producto.\n";
+                    cout << "2. Regresar al menu anterior.\n";
+                    cout << "Elija una opcion: ";
+                    cin >> subopcion;
+                    cin.ignore();
 
-	switch (opcion)
-		case 1:{
-			cout<<"\n--- AGREGAR PRODUCTO ---\n";
-			do{
-			cout<<"1. Nuevo producto.\n";
-			cout<<"2. Regresar al menu anterior.\n";
-			switch (opcion){
-				case 1:{
-					string nombre
-					float precio
-					int existencia
-				
-					cout<<"Ingrese el nombre del producto\n";
-					getline(cin, nombre);
-					for (char &c:nombre){
-						c=tolower(c);
-					}
-					
-					cout<<"Ingrese el precio del producto\n";
-					cin>>precio;
-					
-					cout<<"Ingrese la cantidad en existencia\n";
-					cin>>existencia;
-					cin.ignore();
+                    switch (subopcion) {
+                        case 1: { //NUEVO PRODUCTO
+                            string nombre; //Variable que registrara el nombre ingresado
+                            float precio; //Variable que registrara el precio ingresado
+                            int existencia; //Variable que registrara la existencia ingresada
 
-					nombreproducto.push_back(nombre);
-					precioproducto.push_back(precio);
-					existenciaproducto.push_back(existencia);
+                            cout << "Ingrese el nombre del producto: ";
+                            getline(cin, nombre); //Obtiene la linea completa ingresada
+                            for (char &c : nombre) { 
+                                c = tolower(c); //Convierte los caracteres ingresados en minusculas
+                            }
 
-					cout<<"\n--- PRODUCTO AGREGADO ---\n";
-					break;
-				}
-				case 2:
-					cout<<"\nRegresando...\n";
-					break;
-				default:
-					cout<<"Opcion invalida.\n";
-					break;
-			}
-		} while (opcion!=2);
-		break;
-	}
-		case 2:{
-			if (nombreproducto.empty()){
-				cout<<"No hay productos registrados.\n";
-				break;
-			}
-			do {
-				cout<<"1. Actualizar producto.\n";
-				cout<<"2. Regresar al menu anterior.\n";
-				switch (opcion){
-					case 1:{
-						string buscarprod
-						cout<<"\n--- ACTUALIZAR PRODUCTOS ---\n";
-						cout<<"Ingrese el nombre del producto a buscar.\n";
-						cin>>buscarprod;
-						for (char &c:nombre){
-							c=tolower(c);
-							}
-						bool encontrar=false;
-						for (size_t i=0; i<nombreproducto.size();i++){
-							if (nombreproducto[i]==buscarprod){
-								encontrar=true;
-							}
-						}
-							
-						}
-					}
-				}
-				
-			}
-			}
+                            cout << "Ingrese el precio del producto: ";
+                            cin >> precio;
+                            cout << "Ingrese la cantidad en existencia: ";
+                            cin >> existencia;
+                            cin.ignore();
+
+                            nombreproducto.push_back(nombre);
+                            precioproducto.push_back(precio); 
+                            existenciaproducto.push_back(existencia); //Agrega los datos ingresados al final del vector
+
+                            cout << "\n--- PRODUCTO AGREGADO ---\n";
+                            break;
+                        }
+                        case 2: //REGRESAR AL MENU ANTERIOR
+                            cout << "\n--- REGRESANDO ---\n";
+                            break;
+                        default: //Si la opcion ingresada no esta disponible
+                            cout << "Opcion invalida.\n";
+                            break;
+                    }
+                } while (subopcion != 2); //Repetir el ciclo hasta que el usuario lo detenga
+                break;
+            }
+
+            case 2: { //ACTUALIZAR PRODUCTOS
+                if (nombreproducto.empty()) { //Si no hay ningun dato en el vector
+                    cout << "No hay productos registrados.\n";
+                    break;
+                }
+
+                int subopcion;
+                do {
+                    cout << "\n--- ACTUALIZAR PRODUCTOS ---\n";
+                    cout << "1. Actualizar producto.\n";
+                    cout << "2. Regresar al menu anterior.\n";
+                    cout << "Elija una opcion: ";
+                    cin >> subopcion;
+                    cin.ignore();
+
+                    switch (subopcion) {
+                        case 1: { //ACTUALIZAR PRODUCTO
+                            string buscarprod; //Variable que guardara el producto a buscar
+                            cout << "Ingrese el nombre del producto a buscar: ";
+                            getline(cin, buscarprod); //Registra la linea completa ingresada
+                            for (char &c : buscarprod) {
+                                c = tolower(c); //Convierte los caracteres ingresados a minusculas
+                            }
+
+                            bool encontrado = false; //Variable que verifica si el dato ingresado existe en el vector
+                            for (size_t i = 0; i < nombreproducto.size(); i++) { //Iteracion que buscara si el producto ingresado esta en el vector
+                                if (nombreproducto[i] == buscarprod) { //El producto ingresado es igual al producto existente en el vector
+                                    encontrado = true; //Si se cumple, la variable sera verdadera
+
+                                    cout << "\nProducto encontrado:\n";
+                                    cout << "Producto: " << nombreproducto[i] //Muestra el nombre del producto encontrado
+                                         << "\nPrecio actual: " << precioproducto[i] //Muestra el precio actual del producto
+                                         << "\nExistencia actual: " << existenciaproducto[i] << endl; //Muestra la existencia actual del producto
+
+                                    cout << "\n--- ACTUALIZAR ---\n";
+                                    cout << "1. Precio\n";
+                                    cout << "2. Existencia\n";
+                                    cout << "3. Ambos\n";
+                                    cin >> opcion;
+
+                                    switch (opcion) {
+                                        case 1: //ACTUALIZAR PRECIO
+                                            cout << "Ingrese el nuevo precio: ";
+                                            cin >> precioproducto[i];
+                                            cout << "Precio actualizado correctamente.\n";
+                                            break;
+                                        case 2: //ACTUALIZAR EXISTENCIA
+                                            cout << "Ingrese la nueva cantidad en existencia: ";
+                                            cin >> existenciaproducto[i];
+                                            cout << "Existencia actualizada correctamente.\n";
+                                            break;
+                                        case 3: //ACTUALIZAR PRECIO Y EXISTENCIA
+                                            cout << "Ingrese el nuevo precio: ";
+                                            cin >> precioproducto[i];
+                                            cout << "Ingrese la nueva cantidad en existencia: ";
+                                            cin >> existenciaproducto[i];
+                                            cout << "Precio y existencia actualizados correctamente.\n";
+                                            break;
+                                        default: //Si se ingresa una opcion que no esta disponible
+                                            cout << "Opcion invalida.\n";
+                                            break;
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!encontrado) { //Si el producto ingresado no esta en el vector
+                                cout << "\nProducto no encontrado.\n";
+                            }
+                            cin.ignore();
+                            break;
+                        }
+                        case 2: //REGRESAR AL MENU ANTERIOR
+                            cout << "\n--- REGRESANDO ---\n";
+                            break;
+                        default: //Si se ingresa una opcion que no esta disponible
+                            cout << "Opcion invalida.\n";
+                            break;
+                    }
+                } while (subopcion != 2); //Repetir el ciclo hasta que el usuario lo detenga
+                break;
+            }
+
+            case 3: { //CONSULTAR INVENTARIO
+                if (nombreproducto.empty()) { //Si no hay datos en el vector
+                    cout << "\n--- NO HAY PRODUCTOS EN EL INVENTARIO. ---\n";
+                    break;
+                }
+                cout << "\n--- INVENTARIO ACTUAL ---\n";
+                for (size_t i = 0; i < nombreproducto.size(); i++) { //Iteracion que devuelve todos los datos registrados en el vector
+                    cout << i + 1 << ". " << nombreproducto[i]
+                         << " | Precio: Q" << precioproducto[i]
+                         << " | Existencia: " << existenciaproducto[i] << endl;
+                }
+                break;
+            }
+
+            case 4: //REGRESAR AL MENU
+                cout << "\n--- SALIENDO ---\n";
+                break;
+
+            default: //Si se ingresa una opcion que no esta disponible
+                cout << "\nOpcion invalida.\n";
+                break;
+        }
+
+    } while (opcion != 4); //Repetir el ciclo hasta que el usuario lo detenga
+
+    return 0;
+}
 
 void gestionarClientes() {  // 4
 	int opcion;
